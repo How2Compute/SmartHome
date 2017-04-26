@@ -341,10 +341,37 @@ def is_active(device_id):
         })
     return is_active_other()
     
-@app.route('/api/0.1/portal/permissions/<int:device_id>', methods=['GET'])
+@app.route('/api/0.1/portal/permissions', methods=['GET'])
 @permission_required(0)
-def get_permissions():
+def get_permissions_self():
     if not request.json or 'api_key' not in request.json:
         return abort(400)
     
+    # Get the device of the api key
+    device = Device.query.filter(Device.api_key == request.json.get('api_key')).first()
+    # Was the device found?
+    if not device:
+        return abort(404)
+        
+    # Use the "real" function with the api_keys' device id
+    return get_permissions(device.id)
     
+@app.route('/api/0.1/portal/permissions/<int:device_id>', methods=['GET'])
+@permission_required(0)
+def get_permissions(device_id):
+    if not request.json or 'api_key' not in request.json:
+        return abort(400)
+    
+    device = Device.query.filter(Device.id == device_id).first()
+    if not device:
+        return abort(404)
+    
+    # Allow byepassing of permission check if it's the api keys' device
+    if device.api_key == request.json.get('api_key'):
+        return jsonify({ 'level': device.access_level })
+    
+    # In a function which assures correct permissions
+    @permission_required(1)
+    def is_active_other():
+        return jsonify({ 'level': device.access_level })
+    return is_active_other()
