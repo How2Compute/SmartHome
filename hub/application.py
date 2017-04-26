@@ -27,6 +27,8 @@ def api_ui():
 #   -- GET (own) device status [0]
 #   -- PUT new status
 #   -- DELETE remove device [0] (for self) [2] (for other)
+#   -- POST approve?
+#   -- POST unapprove
 # -- users
 #   -- GET list of users [2]
 #   -- GET user data [2]
@@ -136,3 +138,29 @@ def update_status(id):
             db.session.commit()
             return jsonify({ "success": "true" })
         return other_status()
+        
+# -- Device
+#   -- Remove Device
+# TODO evaluate deactivate vs destroy/delete from db
+@app.route('/api/0.1/devices/<int:id>', methods=['DELETE'])
+@permission_required(0)
+def remove_device(id):
+    # Verify the request contains an API key
+    if not request.json or 'api_key' not in request.json:
+        return abort(400)
+        
+    # "dirty" way to check if this is the clients it's own device
+    device = Device.query.filter(Device.id == id).first()
+    if device.api_key == request.json.get('api_key'):
+        # Delete the device from the database
+        db.session.delete(device)
+        db.session.commit()
+        return jsonify({ "success": "true" })
+    else:
+        @permission_required(1)
+        def remove_other():
+            # Delete the device from the database
+            db.session.delete(device)
+            db.session.commit()
+            return jsonify({ "success": "true" })
+        return remove_other()
