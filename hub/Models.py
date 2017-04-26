@@ -22,16 +22,30 @@ class Device(db.Model):
         self.access_level = permission_level
         self.api_key = generate_api_token()
 
+# Down here to avoid issues with circular dependancies
+from helpers import generate_api_token
+
 # Model to store notifications   
 class Notification(db.Model):
     __tablename__ = 'notifications'
     
     id = db.Column(db.Integer, primary_key = True)
-    body = db.Column(db.String)
-    dismissed = db.Column(db.Boolean)
+    user_id = db.Column(db.Integer)
+    category = db.Column(db.Text)
+    title = db.Column(db.Text)
+    body = db.Column(db.Text)
+    callback_url = db.Column(db.Text)
+    dismissed = db.Column(db.Boolean, default=0)
     
-    def __init__(self, body):
+    # NOTE -120 -> all admins (also TODO when implementing GUI)
+    # NOTE -121 -> all users
+    def __init__(self, user_id, category, title, body, callback_url):
+        self.user_id = user_id
+        self.category = category
+        self.title = title
         self.body = body
+        self.callback_url = callback_url
+        
 
 class Preference(db.Model):
     __tablename__ = 'preferences'

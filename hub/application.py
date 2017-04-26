@@ -65,8 +65,9 @@ def register():
     device = Device(request.json.get('name'), request.json.get('permission_level'))
     db.session.add(device)
     db.session.commit()
-    # Notify User TODO make this also hold a title, call to action URL/URI etc
-    notification = Notification("A new device just tried to register! Please approve it in your devices page.")
+    
+    # Notify Admins TODO make the callback_url valid when dashbaord/GUI gets implemented (don't forget query for this specific device)
+    notification = Notification(-123, "Devices", "New device needs your approval!", "A new device just tried to register! Please approve it in your devices page.", "/test""""url_for('dash_approve_device')""")
     db.session.add(notification)
     db.session.commit();
     
