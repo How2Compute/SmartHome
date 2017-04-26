@@ -30,9 +30,12 @@ def api_ui():
 # -- users
 #   -- GET list of users [2]
 #   -- GET user data [2]
-#   -- PUT user data [2]
-#   -- POST user data [2]
+#   -- PUT user data [2] - DEPRICATED (can only be done through control panel) (semi-replaced by preference functions)
+#   -- POST user data [2] - DEPRICATED (can only be done through control panel) (semi-replaced by preference functions)
 #   -- POST notify user [2]
+#   -- POST preference [1] (clients') [2+] (depending on preference)
+#   -- PUT preference [1] (clients') [2+] (depending on preference)
+#   -- DELETE preference [1] (clients') [2+] (depending on preference)
 # -- portal
 #   -- GET is registered
 #   -- GET permission level [0]
@@ -221,6 +224,19 @@ def get_user(id):
     # Return the user in json
     return jsonify(user)
 
+# -- users
+#   -- update user - DEPRICATED (can only be done through control panel)
+"""
+@app.route('/api/0.1/users', methods=['PUT'])
+@permission_required(1)
+def update_user():
+    # TODO
+    if not request.json:
+        return abort(400)
+    elif 'username' in request.json and type(request.json.get('username')) != unicode:
+        return abort(400)
+    elif ''
+"""
 
 def user_IDtoURI(id):
     # TODO make the api string get_user instead of get_users
