@@ -39,9 +39,8 @@ def api_ui():
 # -- portal
 #   -- GET is device active [0] (self) [1] (other)
 #   -- GET permission level [0]
-#   -- PUT request permission level update [0] [1] - TODO
-#   -- POST approve [2]
-#   -- POST unapprove [2]
+#   -- PUT request permission level update [0] [1] - TODO / Should be POST?
+#   -- POST (un)approve [2]
 
 # [0] = requires to be a registered device
 # [1] = needs to be approved by user
