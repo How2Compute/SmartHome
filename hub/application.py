@@ -226,7 +226,7 @@ def get_user(id):
 # -- Users
 #   -- add preference
 @app.route('/api/0.1/users/<int:id>/preferences', methods=['POST'])
-#@permission_required(1)
+@permission_required(1)
 def add_preference(id):
     if not request.json or 'key' not in request.json or 'value' not in request.json:
         return abort(400)
@@ -246,7 +246,7 @@ def add_preference(id):
     # TODO make this go into 1 query and get it's length?
     for preference in result.preferences:
         if preference.key == request.json.get('key'):
-            return abort(500) # TODO find a real error code for this
+            return abort(409) # Return HTTP conflict error
     
     # Create a preference object with the json data, using permissionlevel 0 for access_requirements if none are provided
     preference = Preference(id, device_id, request.json.get('key'), request.json.get('value'), request.json.get('access_required', 0))
@@ -258,8 +258,10 @@ def add_preference(id):
         "status": "success"
     })
 
+# -- users
+#   -- update value of a given key
 @app.route('/api/0.1/users/<int:user_id>/preferences/<preference_key>', methods=['PUT'])
-#@permission_required(1)
+@permission_required(1)
 def update_preference(user_id, preference_key):
     if not request.json or 'value' not in request.json:# or type(request.json.get('value')) != unicode:
         return abort(400)
@@ -269,7 +271,10 @@ def update_preference(user_id, preference_key):
     if not preference:
         return abort(404)
     
-    # TODO check if it has perms to access this
+    # Get the permission level and if it's not 2, return a forbiden error
+    permission_level = get_preference_perms(request.json.get('api_key'), preference)
+    if permission_level != 2:
+        return abort(403)
     
     # Set the preference it's value and send it to the database
     preference.value = request.json.get('value', preference.value)

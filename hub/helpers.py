@@ -40,3 +40,27 @@ def permission_required(permission):
             return f(*args, **kwargs)
         return decorated_view
     return decorator
+
+"""
+Get the permission level of a preference for an API token.
+0: No Permission
+1: Read Permission (access_level >= access_required OR is the tokens' own preference)
+2: Read/Write Permission (accesslevel > access required OR is the tokens' own preference)
+"""
+def get_preference_perms(api_token, preference):
+    
+    result = Device.query.filter(Device.api_key == api_token).first()
+    # Could not find API key
+    if not result:
+        return 0
+        
+    # Does this device own it?
+    if preference.device_id == result.id or result.access_level > preference.access_required:
+        return 2
+    # Same access level?
+    elif result.access_level == preference.access_required:
+        return 1
+    # None of the above true? No permisions it is!
+    else:
+        return 0
+    
