@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, session, abort, request
+from flask import Flask, jsonify, render_template, session, abort, request, url_for
 from Models import db, Device, Notification, User, Preference
 from helpers import *
 
@@ -170,9 +170,19 @@ def remove_device(id):
 @app.route('/api/0.1/users', methods=['GET', 'DELETE'])
 #@permission_required(1)
 def get_users():
-    users = User.query.all()
-    preferences = users[0].preferences
-    users_len = len(users)
-    preferences_len = len(preferences)
-    print(len(users))
-    return jsonify({"len_users": users_len, "len_preferences": preferences_len})
+    # Select all of the users 
+    result = User.query.with_entities(User.id, User.username, User.access_level)
+    users = []
+    for user in result:
+        _user = {
+            'URI': user_IDtoURI(user.id),
+            'username': user.username,
+            'access_level': user.access_level
+        }
+        users.append(_user)
+    
+    return jsonify(users)
+
+def user_IDtoURI(id):
+    # TODO make the api string get_user instead of get_users
+    return '{}/{}'.format(url_for('get_users', _external=True), id)
