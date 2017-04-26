@@ -18,6 +18,7 @@ class Device(db.Model):
     api_key = db.Column(db.Text)
     active = db.Column(db.Boolean)
     access_level = db.Column(db.Integer)
+    status = db.Column(db.Integer)
     
     def __init__(self, name, permission_level):
         self.name = name
