@@ -253,6 +253,23 @@ def add_preference(id):
         "status": "success"
     })
 
+@app.route('/api/0.1/users/<int:user_id>/preferences/<preference_key>', methods=['PUT'])
+#@permission_required(1)
+def update_preference(user_id, preference_key):
+    if not request.json or 'value' not in request.json:# or type(request.json.get('value')) != unicode:
+        return abort(400)
+    
+    preference = Preference.query.filter_by(user_id=user_id, key=preference_key).first()
+    
+    if not preference:
+        return abort(404)
+    
+    # Set the preference it's value and send it to the database
+    preference.value = request.json.get('value', preference.value)
+    db.session.commit()
+    
+    return jsonify({ "success": "true" })
+    
 def user_IDtoURI(id):
     # TODO make the api string get_user instead of get_users
     return '{}/{}'.format(url_for('get_users', _external=True), id)
