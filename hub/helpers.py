@@ -33,7 +33,10 @@ def permission_required(permission):
             if not client:
                 # Notify the user? Possible intrusion attempt? TODO
                 return abort(403)
-            # Check if the user has the correct permission TODO make this actually check a uint8/uint16!
+            # Check if the device is active
+            if not client.active:
+                return abort(403)
+            # Check if the device has the correct permission TODO make this actually check a uint8/uint16!
             if not (client.access_level >= permission):
                 return abort(403)
             
