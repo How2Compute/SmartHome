@@ -4,7 +4,7 @@ import random
 from functools import wraps
 # Include database models
 from Models import db, Device
-from flask import abort, request
+from flask import abort, request, url_for
 
 # Generate an api key prefixed with api_ (adapted from http://stackoverflow.com/a/23728630)
 def generate_api_token():
@@ -63,4 +63,8 @@ def get_preference_perms(api_token, preference):
     # None of the above true? No permisions it is!
     else:
         return 0
-    
+
+# TODO if this causes any issues, move back to application.py
+def user_IDtoURI(id):
+    # TODO make the api string get_user instead of get_users
+    return '{}/{}'.format(url_for('get_users', _external=True), id)

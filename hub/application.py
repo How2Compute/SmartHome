@@ -37,7 +37,7 @@ def api_ui():
 #   -- PUT preference [1] (clients') [2+] (depending on preference)
 #   -- DELETE preference [1] (clients') [2+] (depending on preference)
 # -- portal
-#   -- GET is registered
+#   -- GET is device active [1]
 #   -- GET permission level [0]
 #   -- PUT request permission level update [0] [1]
 #   -- POST approve [2]
@@ -302,7 +302,23 @@ def remove_preference(user_id, preference_key):
         db.session.commit()
         
         return jsonify({ "success": "true"})
-    
-def user_IDtoURI(id):
-    # TODO make the api string get_user instead of get_users
-    return '{}/{}'.format(url_for('get_users', _external=True), id)
+        
+# -- portal
+#   -- is this an active device
+@app.route('/api/0.1/portal/approved/<int:device_id>', methods=['GET'])
+@permission_required(0)
+def is_active(device_id):
+    if not request.json or 'api_key' not in request.json:
+        return abort(400)
+    device = Device.query.filter(Device.id == device_id).first()
+    if device.api_key == request.json.get('api_key'):
+        return jsonify({
+            'status': 'active' if device.active else 'inactive'
+        })
+    # In a function which assures correct permissions
+    @permission_required(1)
+    def is_active_other():
+        return jsonify({
+            'status': 'active' if device.active else 'inactive'
+        })
+    return is_active_other()
