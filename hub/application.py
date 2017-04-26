@@ -99,13 +99,42 @@ def register():
         "id": device.id,
         "api_key": device.api_key
     })
-    
 # -- devices
-#   -- Register Device
-app.route('/api/0.1/devices', methods=['GET'])
+#   -- List Devices  
+@app.route('/api/0.1/devices', methods=['GET'])
 def list_all_devices():
-    # Check if the user has the correct permission
+    # Did the client provide an API key?
+    if not request.json or not 'api_key' in request.json:
+        abort(400)
     
-    # If not return 403 (forbiden)
+    client = Device.query.filter(Device.api_key == request.json.get('api_key')).first()
     
-    # Return all of the devices (without their api key)
+    # Invalid API key!
+    if not client:
+        # Notify the user? Possible intrusion attempt? TODO
+        abort(403)
+    
+    # Check if the user has the correct permission TODO make this actually check a uint8/uint16!
+    if client.access_level != 1:
+        abort(403)
+    
+    result = Device.query.all()
+    
+    # Create an empty array to store the devices
+    devices = []
+    
+    # Filter out the statuts/device api key (due to security/unnecciserities) + id -> uri
+    for device in result:
+        # Copy the *required* parameters over to a new variable
+        _device = {
+            'id': device.id,
+            'name': device.name,
+            'permission_level': device.access_level,
+            'active': device.active
+        }
+        
+        # Add it to the devices list
+        devices.append(_device)
+    
+    # Return all of the devices (without their api key and status)
+    return jsonify(devices)
