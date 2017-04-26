@@ -280,6 +280,28 @@ def update_preference(user_id, preference_key):
     db.session.commit()
     
     return jsonify({ "success": "true" })
+
+# -- users
+#   -- delete preference
+@app.route('/api/0.1/users/<int:user_id>/preferences/<preference_key>', methods=['DELETE'])
+@permission_required(1)
+def remove_preference(user_id, preference_key):
+    preference = Preference.query.filter_by(user_id=user_id, key=preference_key).first()
+    
+    # Was the preference found?
+    if not preference:
+        return abort(404)
+    
+    # Get the permission level and if it's not 2, return a forbiden error
+    permission_level = get_preference_perms(request.json.get('api_key'), preference)
+    if permission_level != 2:
+        return abort(403)
+    else:
+        # Remove the preference from existence
+        db.session.delete(preference)
+        db.session.commit()
+        
+        return jsonify({ "success": "true"})
     
 def user_IDtoURI(id):
     # TODO make the api string get_user instead of get_users
