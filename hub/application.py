@@ -77,8 +77,6 @@ def register():
 @app.route('/api/0.1/devices', methods=['GET'])
 @permission_required(1)
 def list_all_devices():
-    
-    
     result = Device.query.all()
     
     # Create an empty array to store the devices
@@ -99,3 +97,11 @@ def list_all_devices():
     
     # Return all of the devices (without their api key and status)
     return jsonify(devices)
+
+
+@app.route('/api/0.1/devices/<id>', methods=['GET'])
+@permission_required(1)
+def get_status_unique(id):
+    device = Device.query.filter(Device.id == id).first()
+    
+    return jsonify({ "status": device.status })
