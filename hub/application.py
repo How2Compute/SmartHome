@@ -200,16 +200,15 @@ def get_user(id):
     # Make the preferences serializable
     preferences = []
     for preference in result.preferences:
-        # Ensure that the application has the required permissions
-        @permission_required(preference.access_required) #TODO replace this as this will abort and give a 400/403 error instead. Also check if it's it's own preference
-        def serializePreference():
+        # Ensure that the application has permission to access the preference
+        if get_preference_perms(request.json.get('api_key'), preference) > 0:
+            # Get the relevant fields from the preference
             _preference = {
                 'key': preference.key,
                 'value': preference.value
             }
+            # Add it to the preferences (the client has access to) list
             preferences.append(_preference)
-        # Add the preference only if the client has the right permissions
-        serializePreference()
         
     # Filter out some things for security (password hash & analytics token) & make it JSON serializable
     user = {
