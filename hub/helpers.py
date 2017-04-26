@@ -34,7 +34,7 @@ def permission_required(permission):
                 # Notify the user? Possible intrusion attempt? TODO
                 return abort(403)
             # Check if the user has the correct permission TODO make this actually check a uint8/uint16!
-            if client.access_level != 1:
+            if not (client.access_level >= permission):
                 return abort(403)
             
             return f(*args, **kwargs)
