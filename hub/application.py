@@ -348,12 +348,18 @@ def is_active(device_id):
 def approve_device(device_id):
     if not request.json or 'approve' not in request.json:
         return abort(400)
-     
-    device = Device.query.filter(device_id).first()
+    
+    device = Device.query.filter(Device.id == device_id).first()
+    
+    if not device:
+        return abort(404)
+    
     # Set the device to approved if true was passed in in json, and otherwise set it to false
-    device.approved = request.json.get('approve') == 'true'
+    device.active = request.json.get('approve') == 'true'
     # Save this change to the database
     db.session.commit()
+    
+    return jsonify({ "success": "true" })
 
 @app.route('/api/0.1/portal/permissions', methods=['GET'])
 @permission_required(0)
