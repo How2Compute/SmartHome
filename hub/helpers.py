@@ -20,6 +20,8 @@ def permission_required(f, n):
 # Take in a parameter (the permission level) based on http://stackoverflow.com/a/30853548
 def permission_required(permission):
     def decorator (f):
+            
+        @wraps(f)
         def decorated_view(*args, **kwargs):
             # Did the client provide an API key?
             if not request.json or not 'api_key' in request.json:
@@ -37,5 +39,4 @@ def permission_required(permission):
             
             return f(*args, **kwargs)
         return decorated_view
-
     return decorator
