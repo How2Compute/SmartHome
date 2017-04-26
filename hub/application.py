@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, session, abort, request
-from flask_sqlalchemy import SQLAlchemy
+from Models import db, Device, Notification
 from helpers import *
 
 app = Flask(__name__)
@@ -7,34 +7,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///hub.db"
 app.config['SQLALCHEMY_ECHO'] = True
 
-db = SQLAlchemy(app)
-
-# Model to store information about devices
-class Device(db.Model):
-    __tablename__ = 'clients'
-    
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.Text)
-    api_key = db.Column(db.Text)
-    active = db.Column(db.Boolean)
-    access_level = db.Column(db.Integer)
-    status = db.Column(db.Integer)
-    
-    def __init__(self, name, permission_level):
-        self.name = name
-        self.access_level = permission_level
-        self.api_key = generate_api_token()
-
-# Model to store notifications   
-class Notification(db.Model):
-    __tablename__ = 'notifications'
-    
-    id = db.Column(db.Integer, primary_key = True)
-    body = db.Column(db.String)
-    dismissed = db.Column(db.Boolean)
-    
-    def __init__(self, body):
-        self.body = body
+db.init_app(app)
 
 # GUI
 @app.route('/')
@@ -102,21 +75,9 @@ def register():
 # -- devices
 #   -- List Devices  
 @app.route('/api/0.1/devices', methods=['GET'])
+@permission_required(1)
 def list_all_devices():
-    # Did the client provide an API key?
-    if not request.json or not 'api_key' in request.json:
-        abort(400)
     
-    client = Device.query.filter(Device.api_key == request.json.get('api_key')).first()
-    
-    # Invalid API key!
-    if not client:
-        # Notify the user? Possible intrusion attempt? TODO
-        abort(403)
-    
-    # Check if the user has the correct permission TODO make this actually check a uint8/uint16!
-    if client.access_level != 1:
-        abort(403)
     
     result = Device.query.all()
     
