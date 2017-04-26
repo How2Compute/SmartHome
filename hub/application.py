@@ -182,6 +182,45 @@ def get_users():
         users.append(_user)
     
     return jsonify(users)
+    
+# -- users
+#   -- get user data
+@app.route('/api/0.1/users/<int:id>', methods=['GET'])
+@permission_required(1)
+def get_user(id):
+    result = User.query.filter(User.id == id).first()
+    
+    # Did it successfully retrieve the user?
+    if not result:
+        return abort(404)
+    
+    # Make the preferences serializable
+    preferences = []
+    for preference in result.preferences:
+        # Ensure that the application has the required permissions
+        @permission_required(preference.access_required) #TODO replace this as this will abort and give a 400/4
+        03 error
+        def serializePreference():
+            _preference = {
+                'key': preference.key,
+                'value': preference.value
+            }
+            preferences.append(_preference)
+        # Add the preference only if the client has the right permissions
+        serializePreference()
+        
+    # Filter out some things for security (password hash & analytics token) & make it JSON serializable
+    user = {
+        'id': result.id,
+        'username': result.username,
+        'last_login': result.last_login,
+        'create_date': result.create_date,
+        'access_level': result.access_level,
+        'preferences': preferences
+    }
+    # Return the user in json
+    return jsonify(user)
+
 
 def user_IDtoURI(id):
     # TODO make the api string get_user instead of get_users
