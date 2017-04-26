@@ -13,7 +13,7 @@ class Device(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.Text)
     api_key = db.Column(db.Text)
-    active = db.Column(db.Boolean)
+    active = db.Column(db.Boolean, default=False)
     access_level = db.Column(db.Integer)
     status = db.Column(db.Integer)
     
