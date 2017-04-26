@@ -39,7 +39,7 @@ def api_ui():
 # -- portal
 #   -- GET is device active [0] (self) [1] (other)
 #   -- GET permission level [0]
-#   -- PUT request permission level update [0] [1]
+#   -- PUT request permission level update [0] [1] - TODO
 #   -- POST approve [2]
 #   -- POST unapprove [2]
 
@@ -340,7 +340,21 @@ def is_active(device_id):
             'status': 'active' if device.active else 'inactive'
         })
     return is_active_other()
+
+# -- portal
+#   -- approve/disapprove device
+@app.route('/api/0.1/portal/approved/<int:device_id>', methods=['POST'])
+@permission_required(1)
+def approve_device(device_id):
+    if not request.json or 'approve' not in request.json:
+        return abort(400)
     
+    device = Device.query.filter(device_id).first()
+    # Set the device to approved if true was passed in in json, and otherwise set it to false
+    device.approved = request.json.get('approve') == 'true'
+    # Save this change to the database
+    db.session.commit()
+
 @app.route('/api/0.1/portal/permissions', methods=['GET'])
 @permission_required(0)
 def get_permissions_self():
@@ -375,3 +389,4 @@ def get_permissions(device_id):
     def is_active_other():
         return jsonify({ 'level': device.access_level })
     return is_active_other()
+
