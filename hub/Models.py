@@ -32,3 +32,30 @@ class Notification(db.Model):
     
     def __init__(self, body):
         self.body = body
+
+class Preference(db.Model):
+    __tablename__ = 'preferences'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    key = db.Column(db.Text)
+    value = db.Column(db.Text)
+    access_required = db.Column(db.Integer)
+    
+
+class User(db.Model):
+    __tablename__ = 'users'
+    
+    id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.Text)
+    password = db.Column(db.Text)
+    last_login = db.Column(db.DateTime)
+    create_date = db.Column(db.DateTime)
+    access_level = db.Column(db.Integer)
+    
+    preferences = db.relationship('Preference', backref='user', lazy='joined')
+    
+    def __init__(self, username, password, access_level):
+        self.username = username
+        self.password = password
+        self.access_level = access_level

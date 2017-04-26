@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, session, abort, request
-from Models import db, Device, Notification
+from Models import db, Device, Notification, User, Preference
 from helpers import *
 
 app = Flask(__name__)
@@ -164,3 +164,15 @@ def remove_device(id):
             db.session.commit()
             return jsonify({ "success": "true" })
         return remove_other()
+        
+# -- users
+#   -- list all users
+@app.route('/api/0.1/users', methods=['GET', 'DELETE'])
+#@permission_required(1)
+def get_users():
+    users = User.query.all()
+    preferences = users[0].preferences
+    users_len = len(users)
+    preferences_len = len(preferences)
+    print(len(users))
+    return jsonify({"len_users": users_len, "len_preferences": preferences_len})
