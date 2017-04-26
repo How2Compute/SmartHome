@@ -98,3 +98,13 @@ def register():
         "id": device.id,
         "api_key": device.api_key
     })
+    
+# -- devices
+#   -- Register Device
+app.route('/api/0.1/devices', methods=['GET'])
+def list_all_devices():
+    # Check if the user has the correct permission
+    
+    # If not return 403 (forbiden)
+    
+    # Return all of the devices (without their api key)
