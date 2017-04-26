@@ -27,8 +27,6 @@ def api_ui():
 #   -- GET (own) device status [0]
 #   -- PUT new status
 #   -- DELETE remove device [0] (for self) [2] (for other)
-#   -- POST approve?
-#   -- POST unapprove
 # -- users
 #   -- GET list of users [2]
 #   -- GET user data [2]
@@ -39,6 +37,8 @@ def api_ui():
 #   -- GET is registered
 #   -- GET permission level [0]
 #   -- PUT request permission level update [0] [1]
+#   -- POST approve [2]
+#   -- POST unapprove [2]
 
 # [0] = requires to be a registered device
 # [1] = needs to be approved by user
