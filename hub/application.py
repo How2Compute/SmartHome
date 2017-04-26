@@ -98,8 +98,9 @@ def list_all_devices():
     # Return all of the devices (without their api key and status)
     return jsonify(devices)
 
-
-@app.route('/api/0.1/devices/<id>', methods=['GET'])
+# -- devices
+#   -- device status
+@app.route('/api/0.1/devices/<int:id>', methods=['GET'])
 @permission_required(0)
 def get_status_unique(id):
     device = Device.query.filter(Device.id == id).first()
@@ -110,4 +111,28 @@ def get_status_unique(id):
         @permission_required(1)
         def other_status():
             return jsonify({ "status": device.status })
+        return other_status()
+
+# -- devices
+#   -- new status
+@app.route('/api/0.1/devices/<int:id>', methods=['PUT'])
+@permission_required(0)
+def update_status(id):
+    if not request.json or 'api_key' not in request.json or 'status' not in request.json:
+        return abort(400)
+    # "dirty" way to check if this is the clients it's own device
+    device = Device.query.filter(Device.id == id).first()
+    if device.api_key == request.json.get('api_key'):
+        # Update the device it's status
+        device.status = request.json.get('status')
+        db.session.commit()
+        
+        return jsonify({ "success": "true" })
+    else:
+        @permission_required(1)
+        def other_status():
+            # Update the device it's status
+            device.status = request.json.get('status')
+            db.session.commit()
+            return jsonify({ "success": "true" })
         return other_status()
