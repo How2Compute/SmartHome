@@ -33,7 +33,7 @@ def api_ui():
 #   -- PUT user data [2] - DEPRICATED (can only be done through control panel) (semi-replaced by preference functions)
 #   -- POST user data [2] - DEPRICATED (can only be done through control panel) (semi-replaced by preference functions)
 #   -- POST notify user [2]
-#   -- POST preference [1] (clients') [2+] (depending on preference)
+#   -- POST preference [1]
 #   -- PUT preference [1] (clients') [2+] (depending on preference)
 #   -- DELETE preference [1] (clients') [2+] (depending on preference)
 # -- portal
@@ -223,6 +223,8 @@ def get_user(id):
     # Return the user in json
     return jsonify(user)
 
+# -- Users
+#   -- add preference
 @app.route('/api/0.1/users/<int:id>/preferences', methods=['POST'])
 #@permission_required(1)
 def add_preference(id):
