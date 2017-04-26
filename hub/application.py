@@ -348,7 +348,7 @@ def is_active(device_id):
 def approve_device(device_id):
     if not request.json or 'approve' not in request.json:
         return abort(400)
-    
+     
     device = Device.query.filter(device_id).first()
     # Set the device to approved if true was passed in in json, and otherwise set it to false
     device.approved = request.json.get('approve') == 'true'
