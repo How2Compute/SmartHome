@@ -223,6 +223,33 @@ def get_user(id):
     # Return the user in json
     return jsonify(user)
 
+@app.route('/api/0.1/users/<int:id>/preferences', methods=['POST'])
+#@permission_required(1)
+def add_preference(id):
+    if not request.json or 'key' not in request.json or 'value' not in request.json:
+        return abort(400)
+    
+    result = User.query.filter(id == id).first()
+    
+    # Was there actually a user by the specified id?
+    if not result:
+        return abort(404)
+    
+    # Check if the key is already in the database
+    # TODO make this go into 1 query and get it's length?
+    for preference in result.preferences:
+        if preference.key == request.json.get('key'):
+            return abort(500) # TODO find a real error code for this
+    
+    # Create a preference object with the json data, using permissionlevel 0 for access_requirements if none are provided
+    preference = Preference(id, request.json.get('key'), request.json.get('value'), request.json.get('access_required', 0))
+    # Insert the preference into the database
+    db.session.add(preference)
+    db.session.commit()
+    
+    return jsonify({
+        "status": "success"
+    })
 
 def user_IDtoURI(id):
     # TODO make the api string get_user instead of get_users

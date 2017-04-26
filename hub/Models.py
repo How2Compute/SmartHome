@@ -42,6 +42,12 @@ class Preference(db.Model):
     value = db.Column(db.Text)
     access_required = db.Column(db.Integer)
     
+    def __init__(self, user_id, key, value, access_required):
+        self.user_id = user_id
+        self.key = key
+        self.value = value
+        self.access_required = access_required
+    
 
 class User(db.Model):
     __tablename__ = 'users'
