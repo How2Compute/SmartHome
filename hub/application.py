@@ -37,7 +37,7 @@ def api_ui():
 #   -- PUT preference [1] (clients') [2+] (depending on preference)
 #   -- DELETE preference [1] (clients') [2+] (depending on preference)
 # -- portal
-#   -- GET is device active [1]
+#   -- GET is device active [0] (self) [1] (other)
 #   -- GET permission level [0]
 #   -- PUT request permission level update [0] [1]
 #   -- POST approve [2]
@@ -305,12 +305,30 @@ def remove_preference(user_id, preference_key):
         
 # -- portal
 #   -- is this an active device
+@app.route('/api/0.1/portal/approved', methods=['GET'])
+@permission_required(0)
+def is_active_self():
+    if not request.json or 'api_key' not in request.json:
+        return abort(400)
+    
+    # Get the device of the api key
+    device = Device.query.filter(Device.api_key == request.json.get('api_key')).first()
+    # Was the device found?
+    if not device:
+        return abort(404)
+        
+    # Use the "real" function with the api_keys' device id
+    return is_active(device.id)
+    
 @app.route('/api/0.1/portal/approved/<int:device_id>', methods=['GET'])
 @permission_required(0)
 def is_active(device_id):
     if not request.json or 'api_key' not in request.json:
         return abort(400)
     device = Device.query.filter(Device.id == device_id).first()
+    if not device:
+        return abort(404)
+    
     if device.api_key == request.json.get('api_key'):
         return jsonify({
             'status': 'active' if device.active else 'inactive'
@@ -322,3 +340,11 @@ def is_active(device_id):
             'status': 'active' if device.active else 'inactive'
         })
     return is_active_other()
+    
+@app.route('/api/0.1/portal/permissions/<int:device_id>', methods=['GET'])
+@permission_required(0)
+def get_permissions():
+    if not request.json or 'api_key' not in request.json:
+        return abort(400)
+    
+    
