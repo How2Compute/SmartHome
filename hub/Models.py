@@ -38,12 +38,14 @@ class Preference(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    device_id = db.Column(db.Integer, db.ForeignKey('clients.id')) #TODO does this actually need to be a foreign key or does it merely add overhead?
     key = db.Column(db.Text)
     value = db.Column(db.Text)
     access_required = db.Column(db.Integer)
     
-    def __init__(self, user_id, key, value, access_required):
+    def __init__(self, user_id, device_id, key, value, access_required):
         self.user_id = user_id
+        self.device_id = device_id
         self.key = key
         self.value = value
         self.access_required = access_required

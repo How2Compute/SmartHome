@@ -201,7 +201,7 @@ def get_user(id):
     preferences = []
     for preference in result.preferences:
         # Ensure that the application has the required permissions
-        @permission_required(preference.access_required) #TODO replace this as this will abort and give a 400/403 error
+        @permission_required(preference.access_required) #TODO replace this as this will abort and give a 400/403 error instead. Also check if it's it's own preference
         def serializePreference():
             _preference = {
                 'key': preference.key,
@@ -233,6 +233,11 @@ def add_preference(id):
     
     result = User.query.filter(id == id).first()
     
+    device_id_result = Device.query.filter(Device.api_key == request.json.get('api_key')).first()
+    if not device_id_result:
+        return abort(403)
+    device_id = device_id_result.id
+    
     # Was there actually a user by the specified id?
     if not result:
         return abort(404)
@@ -244,7 +249,7 @@ def add_preference(id):
             return abort(500) # TODO find a real error code for this
     
     # Create a preference object with the json data, using permissionlevel 0 for access_requirements if none are provided
-    preference = Preference(id, request.json.get('key'), request.json.get('value'), request.json.get('access_required', 0))
+    preference = Preference(id, device_id, request.json.get('key'), request.json.get('value'), request.json.get('access_required', 0))
     # Insert the preference into the database
     db.session.add(preference)
     db.session.commit()
@@ -263,6 +268,8 @@ def update_preference(user_id, preference_key):
     
     if not preference:
         return abort(404)
+    
+    # TODO check if it has perms to access this
     
     # Set the preference it's value and send it to the database
     preference.value = request.json.get('value', preference.value)
