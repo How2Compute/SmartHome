@@ -63,6 +63,16 @@ def dash_login():
     else:
         return abort(400)
 
+@app.route('/update/<int:device_id>')
+#@logged_in
+def dash_update_device(device_id):
+    return abort(403)
+
+@app.route('/delete/<int:device_id>')
+#@logged_in
+def dash_delete_device(device_id):
+    return abort(403)
+
 # API
 @app.route('/api/', methods=['GET'])
 def api_ui():
