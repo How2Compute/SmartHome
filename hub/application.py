@@ -27,6 +27,9 @@ def send_build(path):
 @app.route('/images/<path:path>')
 def send_production(path):
     return send_from_directory('static/production/images', path)
+@app.route('/scripts/<path:path>')
+def send_script(path):
+    return send_from_directory('static/scripts', path)
     
 # GUI
 @app.route('/')
@@ -71,7 +74,39 @@ def dash_update_device(device_id):
     if not device:
         return abort(404)
     
-    return render_template('updateDevice.html', device=device)
+    # manually format these to filter out id and to allow preferences to be keys too    
+    properties = [{
+        "key": "name",
+        "value": device.name
+    },
+    {
+        "key": "access_level",
+        "value": device.access_level
+    },
+    {
+        "key": "api_key",
+        "value": device.api_key
+    },
+    {
+        "key": "active",
+        "value": device.active
+    },
+    {
+        "key": "status",
+        "value": device.status
+    }]
+    
+    # TODO replace 1 with session param!!!
+    preferences = Preference.query.filter_by(device_id=device_id, user_id=1)
+    
+    # Copy all the preferences their keys/values
+    for preference in preferences:
+        properties.append({
+            "key": preference.key,
+            "value": preference.value
+        })
+    
+    return render_template('updateDevice.html', device=device, properties=properties)
     
     return abort(403)
 
