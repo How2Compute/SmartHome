@@ -9,6 +9,7 @@ class SmartHomeApi():
     def __init__(self, url, id=-1, api_key="api_none"):
         self.api_url = url
         self.api_key = api_key
+        self.id = id
     # API request helpers
     def PostApiRequest(self, target, payload):
         # Not sure if this works
