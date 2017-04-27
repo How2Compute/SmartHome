@@ -1,11 +1,41 @@
+// When the document has finished loading
 $('document').ready(function() {
+    // allow a button outside of the form to save
+    $('#saveButton').click(function () {
+        // Grab the new value and the key from the HTML (form)
+        var newValue = $('#exampleModal').find('.modal-body input').val();
+        var key = $('#saveButton').attr('data-key')
+        
+        $.ajax({
+        // TODO replace 2 with device id
+          url: "/update/2/"+ key +"/" + newValue,
+          type: 'PUT'
+        }).done(function() {
+          console.log("Successfully made request!")
+          $('#exampleModal').modal("hide")
+        });
+        
+    })
+    // When the modal is shwon
     $('#exampleModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget) // Button that triggered the modal
-      var recipient = button.data('key') // Extract info from data-* attributes
-      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      // Get the caller 
+      var button = $(event.relatedTarget)
+      // Retrieve key and value data
+      var key = button.data('key')
+      var value = button.data('value')
+      
+      // Store a reference to the modal in a variable
       var modal = $(this)
-      modal.find('.modal-title').text('New message to ' + recipient)
-      modal.find('.modal-body input').val(recipient)
+      // Find the modals' title
+      modal.find('.modal-title').text('Update ' + key)
+      // Find the modals' input field
+      var valueField = modal.find('.modal-body input')
+      // Set the input field to the current value and make it the selected object
+      valueField.val(value)
+      valueField.focus()
+      
+      // Find the modals' key field and set it to the key of the thing we want to update
+      modal.find('.modal-footer #saveButton').attr('data-key', key)
+      
     })
 })

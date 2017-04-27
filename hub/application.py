@@ -109,6 +109,22 @@ def dash_update_device(device_id):
     return render_template('updateDevice.html', device=device, properties=properties)
     
     return abort(403)
+    
+@app.route('/update/<int:device_id>/<key>/<value>', methods=['PUT'])
+#@logged_in
+def updateKey(device_id, key, value):
+    # TODO replace 1 with sesions user id
+    preference = Preference.query.filter_by(device_id=device_id, key=key, user_id=1).first()
+    
+    # Was the preference found?
+    if not preference:
+        return abort(404)
+    
+    else:
+        # Alter value, save and return success
+        preference.value = value
+        db.session.commit()
+        return jsonify({"success": "true"})
 
 @app.route('/delete/<int:device_id>')
 #@logged_in
