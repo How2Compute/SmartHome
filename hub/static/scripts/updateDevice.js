@@ -12,6 +12,24 @@ $('document').ready(function() {
           type: 'PUT'
         }).done(function() {
           console.log("Successfully made request!")
+          /*
+          // adapted from: http://stackoverflow.com/a/6135710
+          // Finds the table row for the key we just updated
+          var valueField = $(".keyField").filter(function() {
+            return $(this).text() == "foo";
+          }).closest(".valueField");
+          
+          valueField.val(newValue)
+          */
+          // adapted from: http://stackoverflow.com/a/18952083
+          // Finds the table row for the key we just updated
+          var valueField = $(".keyField").filter(function() {
+            return $(this).attr('data-key') == "access_level";
+          }).closest(".valueField");
+          
+          console.log(valueField.val())
+          
+          //tableRow.css("background-color", "green")
           $('#exampleModal').modal("hide")
         });
         

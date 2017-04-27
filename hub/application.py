@@ -118,7 +118,25 @@ def updateKey(device_id, key, value):
     
     # Was the preference found?
     if not preference:
-        return abort(404)
+        # If it's not a preference, is it a device key instead?
+        device = Device.query.filter_by(id=device_id).first()
+        if key == 'name':
+            device.name = value
+        elif key == 'api_key': # TODO assure API key starts with api_?
+            device.api_key = api_key
+        elif key == 'access_level':
+            device.access_level = access_level
+        elif key == 'active':
+            device.active = active
+        elif key == 'status':
+            device.status = status
+        # If not it could not find the key
+        else:
+            return abort(404)
+        
+        # Commit the device change (here to avoid duplicate code) and return success
+        db.session.commit()
+        return jsonify({"success": "true"})
     
     else:
         # Alter value, save and return success
