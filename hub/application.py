@@ -31,11 +31,29 @@ def send_production(path):
 # GUI
 @app.route('/')
 #@logged_in
-def index():
+def dash_index():
     return render_template('index.html')
+
+@app.route('/devices')
+#@logged_in
+def dash_list_livices():
+    results = Device.query.all()
     
+    devices = []
+    
+    for device in results:
+        _device = {
+            'id': device.id,
+            'name': device.name,
+            'permission_level': device.access_level,
+            'active': device.active
+        }
+        devices.append(_device)
+    
+    return render_template('devices.html', devices=devices)
+
 @app.route('/login', methods=['GET', 'POST'])
-def login():
+def dash_login():
     if request.method == 'GET':
         return render_template('bootstrap/production/login.html')
     elif request.method == 'POST':
