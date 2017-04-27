@@ -6,7 +6,7 @@ api = SmartHomeApi("http://localhost:5000/api/0.1", id=1, api_key="api_LgyPqdKqx
 last_status = "UNKNOWN"
 def doUpdate(status):
     # TODO
-    print("updating! (stauts: {})".format(status))
+    print("updating! (status: {})".format(status))
     
 while True:
     status = api.GetDeviceStatus()

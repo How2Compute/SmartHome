@@ -96,7 +96,7 @@ class SmartHomeApi():
         if not request['success']:
             return None
         else:
-            return request['results']
+            return request['results']['status']
     
     def SetNewStatus(self, status, device_id = -1):
         if device_id == -1:
