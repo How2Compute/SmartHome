@@ -147,6 +147,7 @@ def updateKey(device_id, key, value):
 @app.route('/delete/<int:device_id>')
 #@logged_in
 def dash_delete_device(device_id):
+    # TODO verify admin permissions from 
     return abort(403)
     
 
@@ -170,6 +171,7 @@ def api_ui():
 #   -- POST user data [2] - DEPRICATED (can only be done through control panel) (semi-replaced by preference functions)
 #   -- POST notify user [2]
 #   -- POST preference [1]
+#   -- GET preferences [1] (clients') [2+] (depending on preference) -- TODO
 #   -- PUT preference [1] (clients') [2+] (depending on preference)
 #   -- DELETE preference [1] (clients') [2+] (depending on preference)
 # -- portal
@@ -189,6 +191,7 @@ def api_ui():
 def register():
     # Was json entered?
     if not request.json:
+        print("No json!")
         abort(400)
     # Was the name provided?
     elif 'name' not in request.json:# or type(request.json.get('name')) != string:
