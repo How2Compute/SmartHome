@@ -24,7 +24,10 @@ def send_vendors(path):
 @app.route('/build/<path:path>')
 def send_build(path):
     return send_from_directory('static/build', path)
-
+@app.route('/images/<path:path>')
+def send_production(path):
+    return send_from_directory('static/production/images', path)
+    
 # GUI
 @app.route('/')
 #@logged_in
@@ -38,7 +41,7 @@ def login():
     elif request.method == 'POST':
         # Check Credentials
         flash("Hey Hey!")
-        return render_template('bootstrap/production/login.html')
+        return render_template('bootstrap/production/test.html', username="test", notifications = [{"name": "test_title", "body": "testbody"}, {"name": "tester", "body": "foo, bar and baz!"}])
     else:
         return abort(400)
 

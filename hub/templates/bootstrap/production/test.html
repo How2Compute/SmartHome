@@ -207,11 +207,11 @@
                       <a href="{{ notification.callback_url }}">
                         <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                         <span>
-                          <span>{{ notification.body }}</span>
+                          <span>{{ notification.name|truncate(15, True) }}</span>
                           <span class="time">3 mins ago (TODO)</span>
                         </span>
                         <span class="message">
-                          {{ notification.body||truncate(30, True) }}
+                          {{ notification.body|truncate(30, True) }}
                         </span>
                       </a>
                     </li>
@@ -270,6 +270,7 @@
                   </div>
                   <div class="x_content">
                       {% block body %}
+                      {% endblock %}
                   </div>
                 </div>
               </div>
