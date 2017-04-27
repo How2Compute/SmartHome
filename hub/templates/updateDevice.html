@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<h1>Update Device</h1>
+{% endblock %}
+
+{% block body %}
+<table class="table table-striped projects">
+  <thead>
+    <tr>
+      <th style="width: 20%">Key</th>
+      <th>Value</th>
+      <th style="width: 20%">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for device in devices %}
+    <tr>
+      <td>{{ device.id }}</td>
+      <td>
+        <a>{{ device.name }}</a>
+        <br />
+        <small>Created 01.01.2015</small>
+      </td>
+      <td>
+        <!--
+        <ul class="list-inline">
+          <li>
+            <img src="images/user.png" class="avatar" alt="Avatar">
+          </li>
+          <li>
+            <img src="images/user.png" class="avatar" alt="Avatar">
+          </li>
+          <li>
+            <img src="images/user.png" class="avatar" alt="Avatar">
+          </li>
+          <li>
+            <img src="images/user.png" class="avatar" alt="Avatar">
+          </li>
+        </ul>
+        -->
+        <div class="progress progress_sm">
+        {% if device.permission_level < 5 %}
+        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="100{{ device.permission_level * 10 }}"></div>
+        {% elif device.permission_level  < 8 %}
+        <div class="progress-bar bg-orange" role="progressbar" data-transitiongoal="{{ device.permission_level * 10 }}"></div>
+        {% else %}
+        <div class="progress-bar bg-red" role="progressbar" data-transitiongoal="{{ device.permission_level * 10 }}"></div>
+        {% endif %}
+        </div>
+        <small>Level {{device.permission_level }}</small>
+        
+      </td>
+      <td class="project_progress">
+        <!--
+        <div class="progress progress_sm">
+          <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="57"></div>
+        </div>
+        <small>57% Complete</small>
+        -->
+        {% if device.active == 1 %}
+        <button type="button" class="btn btn-success btn-xs">Active</button>
+        {% else %}
+        <button type="button" class="btn btn-fail btn-xs">Inactive</button>
+        {% endif %}
+      </td>
+      <td>
+        <a href="{{ url_for('dash_update_device', device_id=device.id) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+        <a href="{{ url_for('dash_delete_device', device_id=device.id) }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+      </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -66,12 +66,20 @@ def dash_login():
 @app.route('/update/<int:device_id>')
 #@logged_in
 def dash_update_device(device_id):
+    device = Device.query.filter(Device.id == device_id).first()
+    
+    if not device:
+        return abort(404)
+    
+    return render_template('updateDevice.html', device=device)
+    
     return abort(403)
 
 @app.route('/delete/<int:device_id>')
 #@logged_in
 def dash_delete_device(device_id):
     return abort(403)
+    
 
 # API
 @app.route('/api/', methods=['GET'])
