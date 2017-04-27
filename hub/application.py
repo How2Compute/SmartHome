@@ -1,18 +1,46 @@
-from flask import Flask, jsonify, render_template, session, abort, request, url_for
+from flask import Flask, jsonify, render_template, session, abort, request, url_for, send_from_directory, flash, session
+from flask.ext.session import Session
 from Models import db, Device, Notification, User, Preference
 from helpers import *
+from tempfile import mkdtemp
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///hub.db"
 app.config['SQLALCHEMY_ECHO'] = True
 
+# configure session to use filesystem (instead of signed cookies)
+app.config["SESSION_FILE_DIR"] = mkdtemp()
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
+
 db.init_app(app)
+
+# Allow flask to serve up static files without nginx
+@app.route('/vendors/<path:path>')
+def send_vendors(path):
+    return send_from_directory('static/vendors', path)
+@app.route('/build/<path:path>')
+def send_build(path):
+    return send_from_directory('static/build', path)
 
 # GUI
 @app.route('/')
+#@logged_in
 def index():
     return render_template('index.html')
+    
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('bootstrap/production/login.html')
+    elif request.method == 'POST':
+        # Check Credentials
+        flash("Hey Hey!")
+        return render_template('bootstrap/production/login.html')
+    else:
+        return abort(400)
 
 # API
 @app.route('/api/', methods=['GET'])
