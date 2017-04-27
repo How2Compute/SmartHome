@@ -65,7 +65,11 @@ def dash_login():
         return render_template('bootstrap/production/test.html', username="test", notifications = [{"name": "test_title", "body": "testbody"}, {"name": "tester", "body": "foo, bar and baz!"}])
     else:
         return abort(400)
-
+@app.route('/home-portal')
+#@logged_in
+def portal():
+    devices = Device.query.all()
+    return render_template('portal.html', devices=devices)
 @app.route('/update/<int:device_id>')
 #@logged_in
 def dash_update_device(device_id):
