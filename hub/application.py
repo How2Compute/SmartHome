@@ -50,7 +50,7 @@ def dash_list_livices():
         }
         devices.append(_device)
     
-    return render_template('devices.html', devices=devices)
+    return render_template('devices.html', devices=devices, username="test", notifications = [{"name": "test_title", "body": "testbody"}, {"name": "tester", "body": "foo, bar and baz!"}])
 
 @app.route('/login', methods=['GET', 'POST'])
 def dash_login():
