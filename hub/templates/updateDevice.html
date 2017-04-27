@@ -9,29 +9,33 @@
 {% block title %}
 <h1>Update Device</h1>
 {% endblock %}
+
 {% block start_body %}
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title" id="exampleModalLabel">Update key(TODO)</h1>
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <!--<span aria-hidden="true">&times;</span>-->
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form onsubmit="alert('Hey!'); return false;">
-      <input type="hidden" class="form-control" id="modal_key">
-        <div class="modal-body">
+      <div class="modal-body">
+        <form>
           <div class="form-group">
-            <label for="recipient-name" class="form-control-label">Value:</label>
-            <input type="text" class="form-control" id="modal_value">
+            <label for="recipient-name" class="form-control-label">Recipient:</label>
+            <input type="text" class="form-control" id="recipient-name">
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
-      </form>
+          <div class="form-group">
+            <label for="message-text" class="form-control-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
     </div>
   </div>
 </div>
@@ -59,6 +63,7 @@
         <a href="{{ url_for('dash_update_device', device_id=device.id) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
         <a href="" class="btn btn-warning btn-xs"><i class="fa fa-trash-o"></i> Reset </a>
         <button type="button" id="updateModalButton" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil"></i> Edit </button>
+        <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#exampleModal" data-key="{{ property.key }}" data-value="{{ property.value }}"><i class="fa fa-pencil"></i> Edit </button>
       </td>
     </tr>
     {% endfor %}
