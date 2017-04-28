@@ -5,7 +5,7 @@ $('document').ready(function() {
     if($('.devices_approve_table tbody tr:visible').length == 0)
     {
       console.log("No data!")
-      $('#no_results').css("display", "flex")
+      $('#no_results').show()
     }
     // When a user changed something in a custom_entry field
     $('.approveButton').click(function() {
