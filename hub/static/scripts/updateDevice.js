@@ -5,7 +5,13 @@ $('document').ready(function() {
         // Grab the new value and the key from the HTML (form)
         var newValue = $('#exampleModal').find('.modal-body input').val();
         var key = $('#saveButton').attr('data-key')
-        var deviceID = $(this).attr('data-deviceid')
+        //var deviceID = $('#saveButton').attr('data-deviceid')
+        var link = $(this).data('deviceid')
+        var deviceID = $('#saveButton').attr('data-deviceid')
+        console.log("ID: " + deviceID)
+        console.log("KEY: " + key)
+        console.log(link)
+        var selfObj = $(this)
         
         $.ajax({
           url: "/update/" + deviceID + "/"+ key +"/" + newValue,
@@ -27,7 +33,7 @@ $('document').ready(function() {
           //  return $(this).attr('data-key') == "access_level";
           //}).closest(".valueField");
           // TODO
-          $(document).find("[data-key='name']").closest(".valueField").val("Oi!");
+          selfObj.closest("tr").find(".valueField").val("Oi!");
           
           //console.log(valueField.val())
           
