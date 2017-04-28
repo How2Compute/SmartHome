@@ -146,6 +146,9 @@ def updateKey(device_id, key, value):
     if not preference:
         # If it's not a preference, is it a device key instead?
         device = Device.query.filter_by(id=device_id).first()
+        # Did we hit a device?
+        if not device:
+            return abort(404)
         if key == 'name':
             device.name = value
         elif key == 'api_key':
