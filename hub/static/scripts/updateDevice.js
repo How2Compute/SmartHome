@@ -5,12 +5,7 @@ $('document').ready(function() {
         // Grab the new value and the key from the HTML (form)
         var newValue = $('#exampleModal').find('.modal-body input').val();
         var key = $('#saveButton').attr('data-key')
-        //var deviceID = $('#saveButton').attr('data-deviceid')
-        var link = $(this).data('deviceid')
-        var deviceID = $('#saveButton').attr('data-deviceid')
-        console.log("ID: " + deviceID)
-        console.log("KEY: " + key)
-        console.log(link)
+        var deviceID = $(this).attr('data-deviceid')
         var selfObj = $(this)
         
         $.ajax({
@@ -18,26 +13,10 @@ $('document').ready(function() {
           type: 'PUT'
         }).done(function() {
           console.log("Successfully made request!")
-          /*
-          // adapted from: http://stackoverflow.com/a/6135710
-          // Finds the table row for the key we just updated
-          var valueField = $(".keyField").filter(function() {
-            return $(this).text() == "foo";
-          }).closest(".valueField");
-          
-          valueField.val(newValue)
-          */
-          // adapted from: http://stackoverflow.com/a/18952083
-          // Finds the table row for the key we just updated
-          //var valueField = $(".keyField").filter(function() {
-          //  return $(this).attr('data-key') == "access_level";
-          //}).closest(".valueField");
-          // TODO
+         // selfObj.closest("tr").remove()
           selfObj.closest("tr").find(".valueField").val("Oi!");
           
-          //console.log(valueField.val())
-          
-          //tableRow.css("background-color", "green")
+          // Close the modal
           $('#exampleModal').modal("hide")
         });
         
@@ -49,6 +28,7 @@ $('document').ready(function() {
       // Retrieve key and value data
       var key = button.data('key')
       var value = button.data('value')
+      var deviceid = button.data('deviceid')
       
       // Store a reference to the modal in a variable
       var modal = $(this)
@@ -62,6 +42,8 @@ $('document').ready(function() {
       
       // Find the modals' key field and set it to the key of the thing we want to update
       modal.find('.modal-footer #saveButton').attr('data-key', key)
+      // same with the device it's id
+      modal.find('.modal-footer #saveButton').attr('data-deviceid', deviceid)
       
     })
 })
