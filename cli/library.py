@@ -129,10 +129,12 @@ class SmartHomeApi():
         else:
             return request['results']
     
+    def GetUserPrefences(self, user_id):
+        request = self.GetApiRequest('users/{}/preferences'.format(user_id), {})
+        return request
     
     def AddPreference(self, user_id, key, value):
         request = self.PostApiRequest('users/{}/preferences'.format(user_id), {})
-        
         return request
         
     def UpdatePreference(self, user_id, key, value):
@@ -177,5 +179,4 @@ class SmartHomeApi():
         """   
     class Users():
         def NotifyUser() - TODO
-        def GetPrerences() - TODO
         """

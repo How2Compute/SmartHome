@@ -428,6 +428,31 @@ def get_user(id):
     return jsonify(user)
 
 # -- Users
+#   -- get preferences
+@app.route('/api/0.1/users/<int:id>/preferences', methods=['GET'])
+@permission_required(1)
+def get_preferences(id):
+    result = User.query.filter(User.id == id).first()
+    if not result:
+        return abort(404)
+    else:
+        # Make the preferences serializable
+        preferences = []
+        for preference in result.preferences:
+            # Ensure that the application has permission to access the preference
+            if get_preference_perms(request.json.get('api_key'), preference) > 0:
+                # Get the relevant fields from the preference
+                _preference = {
+                    'key': preference.key,
+                    'value': preference.value
+                }
+                # Add it to the preferences (the client has access to) list
+                preferences.append(_preference)
+    
+    # return the preferences array back to the user
+    return jsonify(preferences)
+
+# -- Users
 #   -- add preference
 @app.route('/api/0.1/users/<int:id>/preferences', methods=['POST'])
 @permission_required(1)
