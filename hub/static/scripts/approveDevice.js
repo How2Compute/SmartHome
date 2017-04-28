@@ -16,6 +16,8 @@ $('document').ready(function() {
         }).done(function() {
           // Hide/Remove the danger box (incase it was still open)
           $('.alert-danger').css("display", "none")
+          // Remove the entry from the table (sothat the user does not have to reload the page)
+          $(this).closest("tr").remove()
         })
         .fail(function() {
           $('.alert-danger').css("display", "flex")

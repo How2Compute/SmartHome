@@ -170,7 +170,7 @@ def dash_approve():
             return abort(400)
         else:
             # Get the requests device id and fall back on -1 if it could somehow not get it
-            device = Device.query.filter_by(id=request.json.get('id', -1)).first()
+            device = Device.query.filter_by(id=request.json.get('id', -1))
             # If the device was not found return a 404 (not found)
             if not device:
                 return abort(404)
@@ -184,7 +184,7 @@ def dash_approve():
                 return jsonify({"success": "true"})
             else:
                 # Set the device to active
-                device.active = True;
+                device.first().active = True;
                 db.session.commit()
                 # Return failiure
                 return jsonify({"success": "true"})
