@@ -28,10 +28,14 @@ $('document').ready(function() {
           // Remove the entry from the table (sothat the user does not have to reload the page)
           selfObj.closest("tr").remove()
           
-          if($('.devices_approve_table tr:visible').length == 0)
+          // Delay a while (as otherwise this proves to be buggy)
+          setTimeout(function() {
+            if($(document).find('.devices_approve_table tr:visible').length == 0)
           {
             $('#no_results').css("display", "flex")
           }
+          }, 1000)
+          
           
         })
         .fail(function() {
