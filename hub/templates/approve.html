@@ -58,8 +58,8 @@
         {{ device.name }}
       </td> 
       <td>
-        <button type="button" class="btn btn-info btn-xs" value="approve"><i class="fa fa-check-circle"></i> Approve </button>
-        <button type="button" class="btn btn-info btn-xs" value="remove"><i class="fa fa-times-circle"></i> Remove </button>
+        <button type="button" class="btn btn-info btn-xs approveButton" value="approve" data-deviceid={{ device.id }}><i class="fa fa-check-circle"></i> Approve </button>
+        <button type="button" class="btn btn-info btn-xs approveButton" value="remove" data-deviceid={{ device.id }}><i class="fa fa-times-circle"></i> Remove </button>
       </td>
     </tr>
     {% endfor %}
