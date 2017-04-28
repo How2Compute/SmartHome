@@ -1,8 +1,17 @@
 // When the document has finished loading
 $('document').ready(function() {
+    $('#no_results').hide()
+    // Check if there are no results when it loads
+    if($('.devices_approve_table tbody tr:visible').length == 0)
+    {
+      console.log("No data!")
+      $('#no_results').css("display", "flex")
+    }
     // When a user changed something in a custom_entry field
     $('.approveButton').click(function() {
       var deviceID = $(this).attr('data-deviceid')
+      // For use within the ajax .done function
+      var selfObj = $(this)
       data = {
         id: deviceID,
         approve: $(this).val() == "approve"
@@ -17,7 +26,13 @@ $('document').ready(function() {
           // Hide/Remove the danger box (incase it was still open)
           $('.alert-danger').css("display", "none")
           // Remove the entry from the table (sothat the user does not have to reload the page)
-          $(this).closest("tr").remove()
+          selfObj.closest("tr").remove()
+          
+          if($('.devices_approve_table tr:visible').length == 0)
+          {
+            $('#no_results').css("display", "flex")
+          }
+          
         })
         .fail(function() {
           $('.alert-danger').css("display", "flex")

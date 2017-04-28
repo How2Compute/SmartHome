@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block body %}
-<table class="table table-striped projects">
+<table class="table table-striped devices_approve_table">
   <thead>
     <tr>
       <th style="width: 20%">#</th>
@@ -26,6 +26,11 @@
     </tr>
   </thead>
   <tbody>
+    <!-- No results table row -->
+    <tr id="no_results" style="display: none">
+      <td>There are currently no devices that require your approval</td>
+    </tr>
+    <!-- End of no results row -->
     {% for device in devices %}
     <tr>
       <td>
