@@ -4,7 +4,7 @@ import random
 from functools import wraps
 # Include database models
 from Models import db, Device
-from flask import abort, request, url_for
+from flask import session, abort, request, url_for, redirect
 
 # Generate an api key prefixed with api_ (adapted from http://stackoverflow.com/a/23728630)
 def generate_api_token():
@@ -71,3 +71,16 @@ def get_preference_perms(api_token, preference):
 def user_IDtoURI(id):
     # TODO make the api string get_user instead of get_users
     return '{}/{}'.format(url_for('get_users', _external=True), id)
+
+"""
+Ensures user is logged in.
+(and redirects the user to the login page if they are not)
+"""
+def logged_in(f):
+    wraps(f)
+    def decorated_function(*args, **kwargs):
+        # if the sessions ID was not set, assume the user was not logged in
+        if not session.get('id'):
+            return redirect(url_for('dash_login'))
+        return f(*args, **kwargs)
+    return decorated_function

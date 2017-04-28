@@ -3,13 +3,14 @@ from flask.ext.session import Session
 from Models import db, Device, Notification, User, Preference
 from helpers import *
 from tempfile import mkdtemp
+from passlib.hash import argon2
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///hub.db"
 app.config['SQLALCHEMY_ECHO'] = True
 
-# configure session to use filesystem (instead of signed cookies)
+# configure session to use filesystem (instead of signed cookies) (copied from pset7 cs50 code)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -33,7 +34,7 @@ def send_script(path):
     
 # GUI
 @app.route('/')
-#@logged_in
+@logged_in
 def dash_index():
     return render_template('index.html')
 
@@ -58,11 +59,31 @@ def dash_list_livices():
 @app.route('/login', methods=['GET', 'POST'])
 def dash_login():
     if request.method == 'GET':
-        return render_template('bootstrap/production/login.html')
+        return render_template('login.html')
     elif request.method == 'POST':
+        
+        if not request.form.get("username") or not request.form.get("password"):
+            flash("You forgot to enter your username and/or password!")
+            return redirect(url_for('dash_login'))
+
+        user = User.query.filter(User.username == request.form.get('username')).first()
+        #hash = argon2.using(rounds=4).hash(request.form.get('password'))
+        hash = argon2.using(rounds=4).hash("password")
+        flash(hash)
+        if not user:
+            flash("Incorrect username! and/or password!")
+            return redirect(url_for('dash_login'))
         # Check Credentials
-        flash("Hey Hey!")
-        return render_template('bootstrap/production/test.html', username="test", notifications = [{"name": "test_title", "body": "testbody"}, {"name": "tester", "body": "foo, bar and baz!"}])
+        if argon2.verify(request.form.get('password'), user.password):
+            # login success
+            # TODO set last login
+            session['id'] = user.id
+            session['username'] = user.username
+            session['access_level'] = user.access_level
+            return redirect(url_for('portal'))
+        else:
+            flash("Incorrect username and/or password!")
+            return redirect(url_for('dash_login'))
     else:
         return abort(400)
 
