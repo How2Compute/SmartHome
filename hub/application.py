@@ -65,6 +65,7 @@ def dash_login():
         return render_template('bootstrap/production/test.html', username="test", notifications = [{"name": "test_title", "body": "testbody"}, {"name": "tester", "body": "foo, bar and baz!"}])
     else:
         return abort(400)
+
 @app.route('/home-portal')
 #@logged_in
 def portal():
@@ -154,8 +155,44 @@ def updateKey(device_id, key, value):
 def dash_delete_device(device_id):
     # TODO verify admin permissions from 
     return abort(403)
-    
 
+@app.route('/approve', methods=['GET', 'POST'])
+#@logged_in
+def dash_approve():
+    if request.method == 'GET':
+        # Get the devices that are not active
+        devices = Device.query.filter(Device.active != True)
+        # Render list of unapproved devices with accept/deny button that posts this URL (with AJAX)
+        return render_template('approve.html', devices=devices);
+    elif request.method == 'POST':
+        if not request.json or 'id' not in request.json or 'approve' not in request.json:
+            # We didn't have all the info, so couldn't understand the request!
+            return abort(400)
+        else:
+            # Get the requests device id and fall back on -1 if it could somehow not get it
+            device = Device.query.filter_by(device_id=request.json.get('id', -1))
+            # If the device was not found return a 404 (not found)
+            if not device:
+                return abort(404)
+        
+            # Delete the device if it was not approved (fall back on True AKA do not delete if it somehow was invalid)
+            if not request.json.get('approve', True):
+                # Get the requests device id and fall back on -1 if it could somehow not get it
+                device.delete()
+                db.session.commit()
+                # Return success
+                return jsonify({"success": "true"})
+            else:
+                
+                # Set active to 1 (true)
+                device.active = 1;
+                db.session.commit()
+                # Return failiure
+                return jsonify({"success": "true"})
+            
+    else:
+        # Method not supported!
+        return abort(405)
 # API
 @app.route('/api/', methods=['GET'])
 def api_ui():
