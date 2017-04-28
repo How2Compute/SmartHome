@@ -28,9 +28,9 @@
       </td>
       <td class="statusField" data-deviceid={{ device.id }}>
         {% if device.status == "ON" %}
-          <button type="button" class="btn btn-info btn-xs on_off_switch" data-deviceid={{ device.id }} value="OFF"><i class="fa fa-power-off"></i> <span class="valueText">OFF</span> </button><small>(currently: ON)</small>
+          <button type="button" class="btn btn-info btn-xs on_off_switch" data-deviceid={{ device.id }} value="OFF"><i class="fa fa-power-off"></i> OFF </button><small id="test">(currently: ON)</small>
         {% elif device.status == "OFF" %}
-          <button type="button" class="btn btn-info btn-xs on_off_switch" data-deviceid={{ device.id }} value="ON"><i class="fa fa-power-off"></i> <span class="valueText">ON</span> </button><small>(currently: OFF)</small>
+          <button type="button" class="btn btn-info btn-xs on_off_switch" data-deviceid={{ device.id }} value="ON"><i class="fa fa-power-off"></i> ON </button><small id="test">(currently: OFF)</small>
           <!-- below may not work! -->
         {# {% elif device.status[:4] == "RGB:" %} #}
         <!--<h1>TODO</h1>-->

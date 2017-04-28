@@ -20,6 +20,8 @@ $('document').ready(function() {
     $('.on_off_switch').click(function() {
       // Get the device's ID from the button
       deviceID = $(this).attr('data-deviceid')
+      // To avoid scope issues with $(this)
+      selfObj = $(this)
       // log for debugging purposes
       console.log("Switching " + deviceID + $(this).val());
       $.ajax({
@@ -27,78 +29,26 @@ $('document').ready(function() {
           type: 'PUT'
         }).done(function() {
           console.log("Successfully made request!")
-          if ($(this).val() == "ON")
+          value = selfObj.val();
+          console.log("Put val() into variable")
+          if (value == "ON")
           {
-            $(this).val("OFF")
-            $(this).closest(".valueText").val("OFF")
+            console.log("Changing text to OFF!")
+            selfObj.val("ON")
+            selfObj.html('<i class="fa fa-power-off"></i> OFF ')
+            selfObj.closest("td").find("#test").text("(currently: ON)")
           }
           else
           {
-            $(this).val("ON")
-            $(this).closest(".valueText").val("ON")
+            console.log("Changing text to ON!")
+            selfObj.val("ON")
+            selfObj.html('<i class="fa fa-power-off"></i> ON ')
+            selfObj.closest("td").find("#test").text("(currently: OFF)")
+            console.log("done!")
           }
         })
         .fail(function() {
           console.log("Failed to update device status!")
         })
-    })
-    
-    // allow a button outside of the form to save
-    $('#saveButton').click(function () {
-        // Grab the new value and the key from the HTML (form)
-        var newValue = $('#exampleModal').find('.modal-body input').val();
-        var key = $('#saveButton').attr('data-key')
-        
-        $.ajax({
-        // TODO replace 2 with device id
-          url: "/update/2/"+ key +"/" + newValue,
-          type: 'PUT'
-        }).done(function() {
-          console.log("Successfully made request!")
-          /*
-          // adapted from: http://stackoverflow.com/a/6135710
-          // Finds the table row for the key we just updated
-          var valueField = $(".keyField").filter(function() {
-            return $(this).text() == "foo";
-          }).closest(".valueField");
-          
-          valueField.val(newValue)
-          */
-          // adapted from: http://stackoverflow.com/a/18952083
-          // Finds the table row for the key we just updated
-          //var valueField = $(".keyField").filter(function() {
-          //  return $(this).attr('data-key') == "access_level";
-          //}).closest(".valueField");
-          // TODO
-          $(document).find("[data-key='name']").closest(".valueField").val("Oi!");
-          
-          //console.log(valueField.val())
-          
-          //tableRow.css("background-color", "green")
-          $('#exampleModal').modal("hide")
-        });
-        
-    })
-    // When the modal is shwon
-    $('#exampleModal').on('show.bs.modal', function (event) {
-      // Get the caller 
-      var button = $(event.relatedTarget)
-      // Retrieve key and value data
-      var key = button.data('key')
-      var value = button.data('value')
-      
-      // Store a reference to the modal in a variable
-      var modal = $(this)
-      // Find the modals' title
-      modal.find('.modal-title').text('Update ' + key)
-      // Find the modals' input field
-      var valueField = modal.find('.modal-body input')
-      // Set the input field to the current value and make it the selected object
-      valueField.val(value)
-      valueField.focus()
-      
-      // Find the modals' key field and set it to the key of the thing we want to update
-      modal.find('.modal-footer #saveButton').attr('data-key', key)
-      
     })
 })
