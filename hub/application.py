@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, session, abort, request, url_for, send_from_directory, flash, session
+from flask import Flask, jsonify, render_template, session, abort, request, url_for, send_from_directory, flash, session, redirect
 from flask.ext.session import Session
 from Models import db, Device, Notification, User, Preference
 from helpers import *
@@ -196,7 +196,7 @@ def dash_approve():
 @app.route('/api/', methods=['GET'])
 def api_ui():
     # The user tried to access the api portal, show them dev getting started instructions (TODO)
-    return render_template('index.html')
+    return redirect(url_for('dash_index'))
 
 # /api
 # -- devices
