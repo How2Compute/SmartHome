@@ -58,9 +58,6 @@
         {{ property.value }}
       </td>  
       <td>
-        <a href="{{ url_for('dash_update_device', device_id=device.id) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-        <a href="" class="btn btn-warning btn-xs"><i class="fa fa-trash-o"></i> Reset </a>
-        <button type="button" id="updateModalButton" class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil"></i> Edit </button>
         <button type="button" class="btn btn-info btn-xs editButton" data-toggle="modal" data-target="#exampleModal" data-key="{{ property.key }}" data-value="{{ property.value }}" data-deviceid="{{ device.id }}"><i class="fa fa-pencil"></i> Edit </button>
       </td>
     </tr>
