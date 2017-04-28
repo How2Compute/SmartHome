@@ -67,9 +67,7 @@ def dash_login():
             return redirect(url_for('dash_login'))
 
         user = User.query.filter(User.username == request.form.get('username')).first()
-        #hash = argon2.using(rounds=4).hash(request.form.get('password'))
-        hash = argon2.using(rounds=4).hash("password")
-        flash(hash)
+
         if not user:
             flash("Incorrect username! and/or password!")
             return redirect(url_for('dash_login'))
