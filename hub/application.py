@@ -39,7 +39,7 @@ def dash_index():
     return render_template('index.html')
 
 @app.route('/devices')
-#@logged_in
+@logged_in
 def dash_list_livices():
     results = Device.query.all()
     
@@ -88,13 +88,13 @@ def dash_login():
         return abort(400)
 
 @app.route('/home-portal')
-#@logged_in
+@logged_in
 def portal():
     devices = Device.query.all()
     return render_template('portal.html', devices=devices)
 
 @app.route('/update/<int:device_id>')
-#@logged_in
+@logged_in
 def dash_update_device(device_id):
     device = Device.query.filter(Device.id == device_id).first()
     
@@ -138,7 +138,7 @@ def dash_update_device(device_id):
     return abort(403)
     
 @app.route('/update/<int:device_id>/<key>/<value>', methods=['PUT'])
-#@logged_in
+@logged_in
 def updateKey(device_id, key, value):
     # TODO replace 1 with sesions user id
     preference = Preference.query.filter_by(device_id=device_id, key=key, user_id=1).first()
@@ -172,13 +172,13 @@ def updateKey(device_id, key, value):
         return jsonify({"success": "true"})
 
 @app.route('/delete/<int:device_id>')
-#@logged_in
+@logged_in
 def dash_delete_device(device_id):
     # TODO verify admin permissions from 
     return abort(403)
 
 @app.route('/approve', methods=['GET', 'POST'])
-#@logged_in
+@logged_in
 def dash_approve():
     if request.method == 'GET':
         # Get the devices that are not active
