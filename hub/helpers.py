@@ -77,7 +77,7 @@ Ensures user is logged in.
 (and redirects the user to the login page if they are not)
 """
 def logged_in(f):
-    wraps(f)
+    @wraps(f)
     def decorated_function(*args, **kwargs):
         # if the sessions ID was not set, assume the user was not logged in
         if not session.get('id'):
