@@ -177,8 +177,9 @@ def updateKey(device_id, key, value):
 @app.route('/delete/<int:device_id>')
 @logged_in
 def dash_delete_device(device_id):
-    # TODO verify admin permissions from 
-    return abort(403)
+    # 2 is the required access level to delete a device!
+    if session['access_level'] < 2:
+       return abort(403)
 
 @app.route('/approve', methods=['GET', 'POST'])
 @logged_in
@@ -216,12 +217,13 @@ def dash_approve():
     else:
         # Method not supported!
         return abort(405)
-# API
+
+# If the user tries to access the api, redirect them to the index page
 @app.route('/api/', methods=['GET'])
 def api_ui():
-    # The user tried to access the api portal, show them dev getting started instructions (TODO)
     return redirect(url_for('dash_index'))
 
+# API
 # /api
 # -- devices
 #   -- POST register device [1]
