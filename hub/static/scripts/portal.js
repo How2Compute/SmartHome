@@ -12,7 +12,6 @@ $('document').ready(function() {
         }).done(function() {
           $('.alert-danger').css("display", "none")
           $('.alert-success').css("display", "flex")
-          console.log("Successfully made request!")
         })
         .fail(function() {
           $('.alert-success').css("display", "none")
@@ -45,8 +44,13 @@ $('document').ready(function() {
             selfObj.html('<i class="fa fa-power-off"></i> ON ')
             selfObj.closest("td").find("#test").text("(currently: OFF)")
           }
+          // Show the bootstrap success alert
+          $('.alert-danger').css("display", "none")
+          $('.alert-success').css("display", "flex")
         })
         .fail(function() {
+          $('.alert-success').css("display", "none")
+          $('.alert-danger').css("display", "flex")
           console.log("Failed to update device status!")
         })
     })
