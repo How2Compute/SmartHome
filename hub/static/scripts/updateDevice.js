@@ -13,8 +13,11 @@ $('document').ready(function() {
           type: 'PUT'
         }).done(function() {
           console.log("Successfully made request!")
-         // selfObj.closest("tr").remove()
-          selfObj.closest("tr").find(".valueField").val("Oi!");
+          
+          // Find the .valueField that belongs to this key and update it's text to the new value
+          $('.editButton').filter(function() { 
+            return $(this).data("key") == key 
+          }).closest("tr").find(".valueField").text(newValue);
           
           // Close the modal
           $('#exampleModal').modal("hide")
