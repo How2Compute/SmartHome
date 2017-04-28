@@ -14,10 +14,14 @@ $('document').ready(function() {
         }).done(function() {
           console.log("Successfully made request!")
           
-          // Find the .valueField that belongs to this key and update it's text to the new value
-          $('.editButton').filter(function() { 
+          // Find the editButton in the table (our point of reference in the table due to it's data- attributes)
+          editButton = $('.editButton').filter(function() { 
             return $(this).data("key") == key 
-          }).closest("tr").find(".valueField").text(newValue);
+          });
+          // Update the value for the next time it needs to update
+          editButton.data("value", newValue)
+          // Find the .valueField that belongs to this key and update it's text to the new value
+          editButton.closest("tr").find(".valueField").text(newValue);
           
           // Close the modal
           $('#exampleModal').modal("hide")
