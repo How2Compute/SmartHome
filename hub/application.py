@@ -350,7 +350,6 @@ def update_status(id):
         
 # -- Device
 #   -- Remove Device
-# TODO evaluate deactivate vs destroy/delete from db
 @app.route('/api/0.1/devices/<int:id>', methods=['DELETE'])
 @permission_required(0)
 def remove_device(id):
@@ -448,7 +447,6 @@ def add_preference(id):
         return abort(404)
     
     # Check if the key is already in the database
-    # TODO make this go into 1 query and get it's length?
     for preference in result.preferences:
         if preference.key == request.json.get('key'):
             return abort(409) # Return HTTP conflict error
