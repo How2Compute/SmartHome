@@ -70,6 +70,7 @@ def dash_login():
 def portal():
     devices = Device.query.all()
     return render_template('portal.html', devices=devices)
+
 @app.route('/update/<int:device_id>')
 #@logged_in
 def dash_update_device(device_id):
@@ -127,13 +128,13 @@ def updateKey(device_id, key, value):
         if key == 'name':
             device.name = value
         elif key == 'api_key': # TODO assure API key starts with api_?
-            device.api_key = api_key
+            device.api_key = value
         elif key == 'access_level':
-            device.access_level = access_level
+            device.access_level = value
         elif key == 'active':
-            device.active = active
+            device.active = value
         elif key == 'status':
-            device.status = status
+            device.status = value
         # If not it could not find the key
         else:
             return abort(404)

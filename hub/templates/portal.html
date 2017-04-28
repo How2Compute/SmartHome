@@ -23,21 +23,21 @@
   <tbody>
     {% for device in devices %}
     <tr>
-      <td class="keyField">
+      <td class="nameField">
         {{ device.name }}
       </td>
-      <td class="valueField">
+      <td class="statusField" data-deviceid={{ device.id }}>
         {% if device.status == "ON" %}
-          <button type="button" class="btn btn-info btn-xs" value="ON"><i class="fa fa-power-off"></i> OFF </button><small>(currently: ON)</small>
+          <button type="button" class="btn btn-info btn-xs on_off_switch" data-deviceid={{ device.id }} value="OFF"><i class="fa fa-power-off"></i> <span class="valueText">OFF</span> </button><small>(currently: ON)</small>
         {% elif device.status == "OFF" %}
-          <button type="button" class="btn btn-info btn-xs" value="ON"><i class="fa fa-power-off"></i> ON </button><small>(currently: OFF)</small>
+          <button type="button" class="btn btn-info btn-xs on_off_switch" data-deviceid={{ device.id }} value="ON"><i class="fa fa-power-off"></i> <span class="valueText">ON</span> </button><small>(currently: OFF)</small>
           <!-- below may not work! -->
         {# {% elif device.status[:4] == "RGB:" %} #}
         <!--<h1>TODO</h1>-->
         {% else %}
          <div class="form-group">
           <label for="custom_entry">Could not recognize status, enter manually</label>
-          <input type="text" class="form-control" id="custom_entry" placeholder="Enter Manually" value={{ device.status }}>
+          <input type="text" class="form-control custom_entry" data-deviceid={{ device.id }} placeholder="Enter Manually" value={{ device.status }}>
           <!-- TODO make this JS/AJAX auto update on commit -->
         </div>
         {% endif %}

@@ -1,5 +1,48 @@
 // When the document has finished loading
 $('document').ready(function() {
+    $("table").find("[data-deviceid='" + 1 + "']").first().css("color", "red");
+    // When a user changed something in a custom_entry field
+    $('.custom_entry').change(function() {
+      var deviceID = $(this).attr('data-deviceid')
+      console.log("Device#: " + deviceID + "!")
+      
+      $.ajax({
+          url: "/update/" + deviceID + "/status/" + $(this).val(),
+          type: 'PUT'
+        }).done(function() {
+          console.log("Successfully made request!")
+        })
+        .fail(function() {
+          console.log("Failed to update device status!")
+        })
+    })
+    
+    $('.on_off_switch').click(function() {
+      // Get the device's ID from the button
+      deviceID = $(this).attr('data-deviceid')
+      // log for debugging purposes
+      console.log("Switching " + deviceID + $(this).val());
+      $.ajax({
+          url: "/update/" + deviceID + "/status/" + $(this).val(),
+          type: 'PUT'
+        }).done(function() {
+          console.log("Successfully made request!")
+          if ($(this).val() == "ON")
+          {
+            $(this).val("OFF")
+            $(this).closest(".valueText").val("OFF")
+          }
+          else
+          {
+            $(this).val("ON")
+            $(this).closest(".valueText").val("ON")
+          }
+        })
+        .fail(function() {
+          console.log("Failed to update device status!")
+        })
+    })
+    
     // allow a button outside of the form to save
     $('#saveButton').click(function () {
         // Grab the new value and the key from the HTML (form)
