@@ -10,41 +10,40 @@ $('document').ready(function() {
           url: "/update/" + deviceID + "/status/" + $(this).val(),
           type: 'PUT'
         }).done(function() {
+          $('.alert-danger').css("display", "none")
+          $('.alert-success').css("display", "flex")
           console.log("Successfully made request!")
         })
         .fail(function() {
+          $('.alert-success').css("display", "none")
+          $('.alert-danger').css("display", "flex")
           console.log("Failed to update device status!")
         })
     })
     
+    // When the ON/OFF button gets pressed
     $('.on_off_switch').click(function() {
       // Get the device's ID from the button
       deviceID = $(this).attr('data-deviceid')
       // To avoid scope issues with $(this)
       selfObj = $(this)
-      // log for debugging purposes
-      console.log("Switching " + deviceID + $(this).val());
+      
+      // Request an update for the status key
       $.ajax({
           url: "/update/" + deviceID + "/status/" + $(this).val(),
           type: 'PUT'
         }).done(function() {
-          console.log("Successfully made request!")
-          value = selfObj.val();
-          console.log("Put val() into variable")
-          if (value == "ON")
+          if (selfObj.val() == "ON")
           {
-            console.log("Changing text to OFF!")
             selfObj.val("ON")
             selfObj.html('<i class="fa fa-power-off"></i> OFF ')
             selfObj.closest("td").find("#test").text("(currently: ON)")
           }
           else
           {
-            console.log("Changing text to ON!")
             selfObj.val("ON")
             selfObj.html('<i class="fa fa-power-off"></i> ON ')
             selfObj.closest("td").find("#test").text("(currently: OFF)")
-            console.log("done!")
           }
         })
         .fail(function() {

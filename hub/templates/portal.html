@@ -6,6 +6,15 @@
   <script src='/scripts/portal.js'></script>
 {% endblock %}
 
+{% block start_body %}
+<div class="alert alert-success" style="display: none">
+  <strong>Success!</strong> We successfully updated that devices' status.
+</div>
+<div class="alert alert-danger" style="display: none">
+  <strong>Oh No!</strong> We wheren't able to update that devices' status.
+</div>
+{% endblock %}
+
 {% block title %}
 <h1>Update Device</h1>
 {% endblock %}
