@@ -5,10 +5,10 @@ $('document').ready(function() {
         // Grab the new value and the key from the HTML (form)
         var newValue = $('#exampleModal').find('.modal-body input').val();
         var key = $('#saveButton').attr('data-key')
+        var deviceID = $(this).attr('data-deviceid')
         
         $.ajax({
-        // TODO replace 2 with device id
-          url: "/update/2/"+ key +"/" + newValue,
+          url: "/update/" + deviceID + "/"+ key +"/" + newValue,
           type: 'PUT'
         }).done(function() {
           console.log("Successfully made request!")
