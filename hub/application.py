@@ -86,6 +86,16 @@ def dash_login():
     else:
         return abort(400)
 
+# Log the user out (ensure the user is logged in, as logging out a logged out user makes no sense)
+@app.route('/logout', methods=['GET', 'POST'])
+@logged_in
+def dash_logout():
+    # Clear the session, effectively logging the user out
+    session.clear()
+    # Redirect them to the login page showing them a successfully logged out page
+    flash("Successfully logged out!")
+    return redirect(url_for('dash_login'))
+
 @app.route('/home-portal')
 @logged_in
 def portal():
