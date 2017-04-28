@@ -36,7 +36,8 @@ def send_script(path):
 @app.route('/')
 @logged_in
 def dash_index():
-    return render_template('index.html')
+    notifications = Notification.query.all()
+    return render_template('index.html', username=session['username'], notifications = notifications)
 
 @app.route('/devices')
 @logged_in
@@ -53,8 +54,10 @@ def dash_list_livices():
             'active': device.active
         }
         devices.append(_device)
+        
+    notifications = Notification.query.all()
     
-    return render_template('devices.html', devices=devices, username="test", notifications = [{"name": "test_title", "body": "testbody"}, {"name": "tester", "body": "foo, bar and baz!"}])
+    return render_template('devices.html', devices=devices, username=session['username'], notifications = notifications)
 
 @app.route('/login', methods=['GET', 'POST'])
 def dash_login():
@@ -98,7 +101,8 @@ def dash_logout():
 @logged_in
 def portal():
     devices = Device.query.all()
-    return render_template('portal.html', devices=devices)
+    notifications = Notification.query.all()
+    return render_template('portal.html', username=session['username'], notifications = notifications)
 
 @app.route('/update/<int:device_id>')
 @logged_in
@@ -140,7 +144,8 @@ def dash_update_device(device_id):
             "value": preference.value
         })
     
-    return render_template('updateDevice.html', device=device, properties=properties)
+    notifications = Notification.query.all()
+    return render_template('updateDevice.html', device=device, properties=properties, username=session['username'], notifications = notifications)
     
     return abort(403)
     
@@ -188,7 +193,7 @@ def updateKey(device_id, key, value):
 @app.route('/delete/<int:device_id>')
 @logged_in
 def dash_delete_device(device_id):
-    # 2 is the required access level to delete a device!
+    # 2 is the required access level to delete a device! TODO
     if session['access_level'] < 2:
        return abort(403)
 
@@ -198,8 +203,9 @@ def dash_approve():
     if request.method == 'GET':
         # Get the devices that are not active
         devices = Device.query.filter(Device.active != True)
+        notifications = Notification.query.all()
         # Render list of unapproved devices with accept/deny button that posts this URL (with AJAX)
-        return render_template('approve.html', devices=devices);
+        return render_template('approve.html', devices=devices, username=session['username'], notifications = notifications)
     elif request.method == 'POST':
         if not request.json or 'id' not in request.json or 'approve' not in request.json:
             # We didn't have all the info, so couldn't understand the request!
