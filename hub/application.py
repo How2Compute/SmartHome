@@ -193,10 +193,23 @@ def updateKey(device_id, key, value):
 @app.route('/delete/<int:device_id>')
 @logged_in
 def dash_delete_device(device_id):
-    # 2 is the required access level to delete a device! TODO
+    # 2 is the minimum required access level to delete a device!
     if session['access_level'] < 2:
        return abort(403)
-
+    
+    device = Device.query.filter(Device.id == device_id).first()
+    
+    # Was the device found?
+    if not device:
+        return abort(404)
+    
+    # Remove the device from the database
+    db.session.delete(device)
+    db.session.commit()
+    
+    # Return a json success response
+    return jsonify({'success': 'true'})
+    
 @app.route('/approve', methods=['GET', 'POST'])
 @logged_in
 def dash_approve():
