@@ -67,10 +67,10 @@ def get_preference_perms(api_token, preference):
     else:
         return 0
 
-# TODO if this causes any issues, move back to application.py
+# Returns the users URI (based upon ID)
 def user_IDtoURI(id):
     # TODO make the api string get_user instead of get_users
-    return '{}/{}'.format(url_for('get_users', _external=True), id)
+    return '{}/{}'.format(url_for('get_user', _external=True, id=id))
 
 """
 Ensures user is logged in.
