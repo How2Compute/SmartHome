@@ -1,11 +1,17 @@
 {% extends "layout.html" %}
 
+{% block custom_link %}
+  <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        
+  <script src='/scripts/devices.js'></script>
+{% endblock %}
+
 {% block title %}
 <h1>Devices</h1>
 {% endblock %}
 
 {% block body %}
-<table class="table table-striped projects">
+<table class="table table-striped projects devices_table">
   <thead>
     <tr>
       <th style="width: 1%">#</th>
@@ -16,6 +22,11 @@
     </tr>
   </thead>
   <tbody>
+    <!-- No results table row -->
+    <tr id="no_results">
+      <td colspan=5><h2 style="text-align:center"><strong>You don't currently have any devices added to your SmartHome hub!</strong></h2></td>
+    </tr>
+    <!-- End of no results row -->
     {% for device in devices %}
     <tr>
       <td>{{ device.id }}</td>
@@ -45,7 +56,7 @@
       </td>
       <td>
         <a href="{{ url_for('dash_update_device', device_id=device.id) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-        <a href="{{ url_for('dash_delete_device', device_id=device.id) }}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+        <button class="btn btn-danger btn-xs deleteDevice" data-deviceid={{device.id}}><i class="fa fa-trash-o"></i> Delete </a>
       </td>
     </tr>
     {% endfor %}

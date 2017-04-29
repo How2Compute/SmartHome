@@ -190,7 +190,7 @@ def updateKey(device_id, key, value):
         db.session.commit()
         return jsonify({"success": "true"})
 
-@app.route('/delete/<int:device_id>')
+@app.route('/delete/<int:device_id>', methods=['POST'])
 @logged_in
 def dash_delete_device(device_id):
     # 2 is the minimum required access level to delete a device!
