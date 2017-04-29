@@ -268,13 +268,13 @@ def api_ui():
 #   -- POST user data [2] - DEPRICATED (can only be done through control panel) (semi-replaced by preference functions)
 #   -- POST notify user [2]
 #   -- POST preference [1]
-#   -- GET preferences [1] (clients') [2+] (depending on preference) -- TODO
+#   -- GET preferences [1] (clients') [2+] (depending on preference)
 #   -- PUT preference [1] (clients') [2+] (depending on preference)
 #   -- DELETE preference [1] (clients') [2+] (depending on preference)
 # -- portal
 #   -- GET is device active [0] (self) [1] (other)
 #   -- GET permission level [0]
-#   -- PUT request permission level update [0] [1] - TODO / Should be POST?
+#   -- PUT request permission level update [0] [1] - DEPRICATED (can only be done through control panel) (due to security issues)
 #   -- POST (un)approve [2]
 
 # [0] = requires to be a registered device
@@ -462,7 +462,12 @@ def get_user(id):
 @app.route('/api/0.1/users/<int:id>/preferences', methods=['GET'])
 @permission_required(1)
 def get_preferences(id):
+    if not request.json or 'api_key' not in request.json:
+        return abort(400)
+    
+    # List all this users' preferences
     result = User.query.filter(User.id == id).first()
+    
     if not result:
         return abort(404)
     else:
