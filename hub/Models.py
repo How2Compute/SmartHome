@@ -22,9 +22,6 @@ class Device(db.Model):
         self.access_level = permission_level
         self.api_key = generate_api_token()
 
-# Down here to avoid issues with circular dependancies
-from helpers import generate_api_token
-
 # Model to store notifications   
 class Notification(db.Model):
     __tablename__ = 'notifications'
@@ -46,6 +43,9 @@ class Notification(db.Model):
         self.body = body
         self.callback_url = callback_url
         
+
+# Down here to avoid issues with circular dependancies
+from helpers import generate_api_token
 
 class Preference(db.Model):
     __tablename__ = 'preferences'

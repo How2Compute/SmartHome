@@ -3,7 +3,7 @@ import random
 
 from functools import wraps
 # Include database models
-from Models import db, Device
+from Models import db, Device, Notification
 from flask import session, abort, request, url_for, redirect
 
 # Generate an api key prefixed with api_ (adapted from http://stackoverflow.com/a/23728630)
@@ -31,7 +31,11 @@ def permission_required(permission):
             
             # Invalid API key!
             if not client:
-                # Notify the user? Possible intrusion attempt? TODO
+                # Notify the admins about a possible intrusion attempt
+                notification = Notification(-120, "Alert", "Possible Intrusion Attempt!", "An invalid API key tried to log in!", "#")
+                db.session.add(notification)
+                db.session.commit()
+                # Return 403, forbiden
                 return abort(403)
             # Check if the device is active
             if not client.active:
@@ -69,7 +73,6 @@ def get_preference_perms(api_token, preference):
 
 # Returns the users URI (based upon ID)
 def user_IDtoURI(id):
-    # TODO make the api string get_user instead of get_users
     return '{}/{}'.format(url_for('get_user', _external=True, id=id))
 
 """
