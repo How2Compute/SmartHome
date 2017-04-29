@@ -36,8 +36,12 @@ def send_script(path):
 @app.route('/')
 @logged_in
 def dash_index():
+    """
     notifications = Notification.query.all()
     return render_template('index.html', username=session['username'], notifications = notifications)
+    """
+    # Redirect the user to the portal
+    return redirect(url_for('portal'))
 
 @app.route('/devices')
 @logged_in
