@@ -1,6 +1,13 @@
 // When the document has finished loading
 $('document').ready(function() {
-    $("table").find("[data-deviceid='" + 1 + "']").first().css("color", "red");
+    $('#no_results').hide()
+    // Check if there are no results when it loads
+    if($('.devices_table tbody tr:visible').length == 0)
+    {
+      console.log("No data!")
+      $('#no_results').show()
+    }
+    
     // When a user changed something in a custom_entry field
     $('.custom_entry').change(function() {
       var deviceID = $(this).attr('data-deviceid')

@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block body %}
-<table class="table table-striped projects">
+<table class="table table-striped devices_table">
   <thead>
     <tr>
       <th style="width: 20%">Device</th>
@@ -30,6 +30,11 @@
     </tr>
   </thead>
   <tbody>
+    <!-- No results table row -->
+    <tr id="no_results">
+      <td colspan=5><h2 style="text-align:center"><strong>You don't currently have any devices added to your SmartHome hub!</strong></h2></td>
+    </tr>
+    <!-- End of no results row -->
     {% for device in devices %}
     <tr>
       <td class="nameField">

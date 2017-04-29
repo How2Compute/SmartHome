@@ -102,7 +102,7 @@ def dash_logout():
 def portal():
     devices = Device.query.all()
     notifications = Notification.query.all()
-    return render_template('portal.html', username=session['username'], notifications = notifications)
+    return render_template('portal.html', devices=devices, username=session['username'], notifications = notifications)
 
 @app.route('/update/<int:device_id>')
 @logged_in
