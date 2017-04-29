@@ -52,7 +52,7 @@ class Preference(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    device_id = db.Column(db.Integer, db.ForeignKey('clients.id')) #TODO does this actually need to be a foreign key or does it merely add overhead?
+    device_id = db.Column(db.Integer, db.ForeignKey('clients.id'))
     key = db.Column(db.Text)
     value = db.Column(db.Text)
     access_required = db.Column(db.Integer)
