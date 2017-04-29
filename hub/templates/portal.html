@@ -14,7 +14,7 @@
   <strong>Oh No!</strong>&nbsp; We wheren't able to update that devices' status.
 </div>
 {% endblock %}
-{# TODO make something in the table for no devices to approve if there are none to approve #}
+
 {% block title %}
 <h1>Update Device</h1>
 {% endblock %}
@@ -45,14 +45,10 @@
           <button type="button" class="btn btn-info btn-xs on_off_switch" data-deviceid={{ device.id }} value="OFF"><i class="fa fa-power-off"></i> OFF </button><small id="test">(currently: ON)</small>
         {% elif device.status == "OFF" %}
           <button type="button" class="btn btn-info btn-xs on_off_switch" data-deviceid={{ device.id }} value="ON"><i class="fa fa-power-off"></i> ON </button><small id="test">(currently: OFF)</small>
-          <!-- below may not work! -->
-        {# {% elif device.status[:4] == "RGB:" %} #}
-        <!--<h1>TODO</h1>-->
         {% else %}
          <div class="form-group">
           <label for="custom_entry">Could not recognize status, enter manually</label>
           <input type="text" class="form-control custom_entry" data-deviceid={{ device.id }} placeholder="Enter Manually" value={{ device.status }}>
-          <!-- TODO make this JS/AJAX auto update on commit -->
         </div>
         {% endif %}
       </td>
