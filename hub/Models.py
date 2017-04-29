@@ -33,6 +33,7 @@ class Notification(db.Model):
     body = db.Column(db.Text)
     callback_url = db.Column(db.Text)
     dismissed = db.Column(db.Boolean, default=0)
+    timestamp = db.Column(db.DateTime)
     
     # NOTE -120 -> all admins (also TODO when implementing GUI)
     # NOTE -121 -> all users
