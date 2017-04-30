@@ -38,7 +38,6 @@ def doUpdate(status):
     print("updating! (status: {})".format(status))
     
 while True:
-#    print(api.GetUserPrerences(2))
     status = api.GetDeviceStatus()
     if last_status != status:
         # Changed!
