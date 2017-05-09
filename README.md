@@ -1,4 +1,5 @@
-# SmartHome!A smart home project created for cs50x 2017!
+# SmartHome!
+### A smart home project created for cs50x 2017!
 This repository contains the following: 
 - The Hub (in hub/)
   - A dashboard for managing devices (default login: foo|password)
