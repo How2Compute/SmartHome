@@ -4,13 +4,7 @@ import RPi.GPIO as GPIO
 import time
 from datetime import datetime
 
-<<<<<<< HEAD
 # 7  -> LED
-=======
-# 7  -> RED
-# 11 -> GREEN
-# 12 -> BLUE
->>>>>>> 16547e7a5711f477a38f7aecf46609b06a542038
 
 # Create the client with pre-existing credentials
 api = SmartHomeApi("http://localhost:5000/api/0.1", id=10, api_key="api_eMxSb7n6G10Svojn3PlU5P6srMaDrFxmKAnWvnW6UyzmBG")
@@ -28,17 +22,6 @@ while True:
     
     preference = (item for item in preferences if item["key"] == "bedtime").next()
     
-    """
-    if not 'bedtime' in preferences:
-        print("Could not find 'bedtime' preference!")
-        api.AddPreference(2, "bedtime", "00:00")
-        print("Created bedtime preference! Please set it to the correct value in your dashboard")
-        break
-    
-    preference = preferences["bedtime"]
-    """
-    
->>>>>>> 16547e7a5711f477a38f7aecf46609b06a542038
     if not preference:
         print("Could not fin 'bedtime' preference!")
         api.AddPreference(2, "bedtime", "00:00")
@@ -64,4 +47,3 @@ while True:
         
     
     time.sleep(1)
-
